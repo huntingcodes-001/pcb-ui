@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
-import { Upload, Sliders, Send, X } from 'lucide-react';
+import { Upload, Sliders, Send, X, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const ImprovePCB = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -53,41 +54,51 @@ const ImprovePCB = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-12 dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-extrabold text-gray-900 text-center mb-12">
+        <div className="flex items-center mb-8">
+          <Link
+            to="/get-started"
+            className="flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-200"
+          >
+            <ArrowLeft className="h-5 w-5 mr-2" />
+            Back to Home
+          </Link>
+        </div>
+
+        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white text-center mb-12">
           Improve Your PCB Design
         </h1>
 
         {/* File Upload Section */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
           <div
             className={`flex items-center justify-center w-full ${
-              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+              isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600'
             }`}
             onDragEnter={handleDragEnter}
             onDragOver={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
           >
-            <label className="w-full flex flex-col items-center px-4 py-6 bg-white rounded-lg border-2 border-dashed cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+            <label className="w-full flex flex-col items-center px-6 py-8 bg-white dark:bg-gray-800 rounded-lg border-2 border-dashed cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
               {selectedFile ? (
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-500">{selectedFile.name}</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{selectedFile.name}</span>
                   <button
                     onClick={removeFile}
-                    className="p-1 rounded-full hover:bg-gray-100"
+                    className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
-                    <X className="h-4 w-4 text-gray-500" />
+                    <X className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   </button>
                 </div>
               ) : (
                 <>
                   <Upload className="h-12 w-12 text-gray-400" />
-                  <span className="mt-2 text-sm text-gray-500">
+                  <span className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                     Drop your PCB design file here or click to browse
                   </span>
-                  <span className="mt-1 text-xs text-gray-400">
+                  <span className="mt-1 text-xs text-gray-400 dark:text-gray-500">
                     Supported formats: .pcb, .gerber
                   </span>
                 </>
@@ -103,8 +114,8 @@ const ImprovePCB = () => {
         </div>
 
         {/* Parameters Section */}
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
             <Sliders className="h-5 w-5 mr-2" />
             Optimization Parameters
           </h2>
@@ -112,10 +123,10 @@ const ImprovePCB = () => {
           {Object.entries(parameters).map(([key, value]) => (
             <div key={key} className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <label className="block text-sm font-medium text-gray-700 capitalize">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
                   {key}
                 </label>
-                <span className="text-sm text-gray-500">{value}%</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">{value}%</span>
               </div>
               <div className="relative">
                 <input
@@ -124,12 +135,12 @@ const ImprovePCB = () => {
                   max="100"
                   value={value}
                   onChange={(e) => handleParameterChange(key, parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
                   style={{
-                    background: `linear-gradient(to right, #2563eb ${value}%, #e5e7eb ${value}%)`,
+                    background: `linear-gradient(to right, #2563eb ${value}%, ${isDragging ? '#1f2937' : '#e5e7eb'} ${value}%)`,
                   }}
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
+                <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500 mt-1">
                   <span>Min</span>
                   <span>Max</span>
                 </div>
@@ -140,7 +151,7 @@ const ImprovePCB = () => {
 
         {/* Generate Button */}
         <button
-          className="w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={!selectedFile}
         >
           Generate Improvements
@@ -151,4 +162,4 @@ const ImprovePCB = () => {
   );
 };
 
-export default ImprovePCB;
+export default ImprovePCB
